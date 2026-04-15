@@ -1,6 +1,6 @@
-import { DisponibilidadService } from './DisponibilidadService.js';
-import { ConfigController } from './ConfigController.js';
-import { UI } from '../Capa_de_Presentacion/UI.js';
+import { DisponibilidadService } from './disponibilidadService.js';
+import { ConfigController } from './configController.js';
+import { UI } from '../capaDePresentacion/ui.js';
 
 let appState = {
     canchas: [],

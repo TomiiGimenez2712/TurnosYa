@@ -1,5 +1,5 @@
-import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
-import { CanchaFactory } from './CanchaFactory.js';
+import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
+import { CanchaFactory } from './canchaFactory.js';
 
 export class CanchaController {
     /**

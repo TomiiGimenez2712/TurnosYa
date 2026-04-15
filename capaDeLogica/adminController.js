@@ -1,4 +1,4 @@
-import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
+import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
 
 export class AdminController {
     /**

@@ -1,4 +1,4 @@
-import { Cancha, CanchaFutbol, CanchaPadel, CanchaTenis } from './Cancha.js';
+import { Cancha, CanchaFutbol, CanchaPadel, CanchaTenis } from './cancha.js';
 
 export class CanchaFactory {
     static crearCancha(nombre, tipo_deporte, hora_apertura, hora_cierre, precio) {

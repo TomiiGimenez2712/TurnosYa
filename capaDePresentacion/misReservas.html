@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html class="light" lang="es">
 <head>
     <meta charset="utf-8" />
@@ -30,10 +30,10 @@
                 <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
                     <span class="material-symbols-rounded text-3xl">receipt_long</span>
                 </div>
-                <h2 class="text-2xl font-bold mb-2">BuscÃ¡ tus Reservas</h2>
-                <p class="text-sm text-gray-500 font-medium mb-6">IngresÃ¡ el correo que usaste al agendar para consultar el estado de tus turnos o realizar el pago.</p>
+                <h2 class="text-2xl font-bold mb-2">Buscá tus Reservas</h2>
+                <p class="text-sm text-gray-500 font-medium mb-6">Ingresá el correo que usaste al agendar para consultar el estado de tus turnos o realizar el pago.</p>
                 <form onsubmit="event.preventDefault(); window.buscarReservas();">
-                    <input type="email" id="search-email" required placeholder="tÃº@correo.com" class="w-full border border-gray-200 rounded-xl px-4 py-4 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all text-center mb-4">
+                    <input type="email" id="search-email" required placeholder="tú@correo.com" class="w-full border border-gray-200 rounded-xl px-4 py-4 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all text-center mb-4">
                     <button type="submit" id="btn-search" class="w-full bg-dark text-white font-extrabold text-lg py-4 rounded-xl shadow-lg hover:bg-gray-800 active:scale-95 transition-all">
                         Consultar
                     </button>
@@ -59,8 +59,8 @@
     </main>
 
     <script type="module">
-        import { DisponibilidadService } from '../capaDeLogica/disponibilidadService.js';
-        import { ConfigController } from '../capaDeLogica/configController.js';
+        import { DisponibilidadService } from '../Capa_de_Logica/DisponibilidadService.js';
+        import { ConfigController } from '../Capa_de_Logica/ConfigController.js';
 
         let clubConfig = null;
 
@@ -96,7 +96,7 @@
                 <div class="col-span-full bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center">
                     <span class="material-symbols-rounded text-6xl text-gray-300 block mb-3">sentiment_dissatisfied</span>
                     <h3 class="text-lg font-bold">No hay reservas</h3>
-                    <p class="text-sm text-gray-500 mt-1">No encontramos ningÃºn turno activo con ese correo.</p>
+                    <p class="text-sm text-gray-500 mt-1">No encontramos ningún turno activo con ese correo.</p>
                     <button onclick="window.location.href='index.html'" class="mt-4 bg-brand text-white px-5 py-2.5 rounded-xl font-bold opacity-90 hover:opacity-100 transition-opacity decoration-none">Reservar ahora</button>
                 </div>`;
                 return;
@@ -107,12 +107,12 @@
                 let actionBtn = '';
                 if(isPending && clubConfig) {
                     const phoneWs = (clubConfig.telefono_whatsapp || '').replace(/\D/g, '');
-                    const text = encodeURIComponent(`Hola, envÃ­o el comprobante de pago de mi reserva de *${r.canchas.nombre}* a las *${r.hora} hs* del dÃ­a *${r.fecha}* por *$${r.precio}*.`);
+                    const text = encodeURIComponent(`Hola, envío el comprobante de pago de mi reserva de *${r.canchas.nombre}* a las *${r.hora} hs* del día *${r.fecha}* por *$${r.precio}*.`);
                     actionBtn = `
                     <button onclick="window.open('https://wa.me/${phoneWs}?text=${text}', '_blank')" class="mt-3 w-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366]/20 font-bold py-2.5 rounded-lg flex items-center justify-center gap-1.5 text-sm transition-colors cursor-pointer border border-[#25D366]/20">
                         <span class="material-symbols-rounded text-[18px]">send</span> Enviar Comprobante
                     </button>
-                    <p class="text-[10px] text-gray-400 mt-1.5 text-center leading-tight">Si ya lo enviaste, el club lo confirmarÃ¡ en breve.</p>
+                    <p class="text-[10px] text-gray-400 mt-1.5 text-center leading-tight">Si ya lo enviaste, el club lo confirmará en breve.</p>
                     `;
                 }
 
@@ -159,4 +159,3 @@
     </script>
 </body>
 </html>
-

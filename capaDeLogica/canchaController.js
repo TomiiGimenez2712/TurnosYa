@@ -1,14 +1,14 @@
-﻿import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
-import { CanchaFactory } from './canchaFactory.js';
+import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
+import { CanchaFactory } from './CanchaFactory.js';
 
 export class CanchaController {
     /**
-     * Intercepta la creaciÃ³n de una cancha desde el formulario web
+     * Intercepta la creación de una cancha desde el formulario web
      * y utiliza la Factory para persistir el objeto adecuado en BD.
      */
     static async createCancha(datosFormulario) {
         try {
-            // 1. Usamiento del PatrÃ³n Factory Method
+            // 1. Usamiento del Patrón Factory Method
             const nuevaCanchaObj = CanchaFactory.crearCancha(
                 datosFormulario.nombre,
                 datosFormulario.tipo_deporte,
@@ -17,10 +17,10 @@ export class CanchaController {
                 datosFormulario.precio
             );
 
-            // Podemos loguear requisitos si quisiÃ©ramos para validar el Factory
+            // Podemos loguear requisitos si quisiéramos para validar el Factory
             console.log("Creando cancha con Factory:", nuevaCanchaObj.obtenerRequisitos());
 
-            // 2. Persistencia en la Base de Datos a travÃ©s de Supabase BaaS
+            // 2. Persistencia en la Base de Datos a través de Supabase BaaS
             const { data, error } = await supabaseClient
                 .from('canchas')
                 .insert([{
@@ -114,4 +114,3 @@ export class CanchaController {
         }
     }
 }
-

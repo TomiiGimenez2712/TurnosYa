@@ -1,11 +1,11 @@
-﻿import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
+import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
 
 export class AdminController {
     /**
-     * Obtiene las reservas con informaciÃ³n relacionada para la vista del administrador
+     * Obtiene las reservas con información relacionada para la vista del administrador
      */
     static async obtenerReservasDelDia(fechaBase) {
-        // En una consulta compleja, podrÃ­amos querer hacer join con la tabla 'canchas'
+        // En una consulta compleja, podríamos querer hacer join con la tabla 'canchas'
         // para obtener el nombre, y con 'jugadores' para obtener los datos.
         const { data, error } = await supabaseClient
             .from('reservas')
@@ -30,7 +30,7 @@ export class AdminController {
 
     /**
      * Elimina una reserva de la base de datos
-     * (El RLS requiere que el usuario estÃ© autenticado para hacer esto)
+     * (El RLS requiere que el usuario esté autenticado para hacer esto)
      */
     static async eliminarReserva(id) {
         const { error } = await supabaseClient
@@ -61,4 +61,3 @@ export class AdminController {
         return { success: true };
     }
 }
-

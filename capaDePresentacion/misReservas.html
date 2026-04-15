@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html class="light" lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport" />
+    <title>Mis Reservas - Turnos YA</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="style.css">
+    <script>
+        tailwind.config = { theme: { extend: { colors: { "brand": "#22c55e", "surface": "#f8fafc", "dark": "#0f172a" }, fontFamily: { "sans": ["Inter", "sans-serif"] } } } }
+    </script>
+</head>
+<body class="bg-surface font-sans text-dark antialiased min-h-screen flex flex-col">
+    <nav class="bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+        <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
+            <span class="text-lg font-extrabold flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity" onclick="window.location.href='index.html'">
+                <span class="material-symbols-rounded text-brand">sports_tennis</span> 
+                <span id="club-title">Turnos YA</span>
+            </span>
+            <button onclick="window.location.href='index.html'" class="text-sm font-bold text-gray-600 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-lg transition-colors border border-gray-200">Nuevo Turno</button>
+        </div>
+    </nav>
+    <main class="max-w-3xl mx-auto px-4 py-8 md:py-12 flex-1 w-full relative">
+        <div id="email-step" class="max-w-md mx-auto mt-10 transition-all duration-500">
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 text-center relative overflow-hidden">
+                <div class="absolute -right-10 -top-10 w-32 h-32 bg-brand/10 rounded-full blur-2xl"></div>
+                <div class="w-16 h-16 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+                    <span class="material-symbols-rounded text-3xl">receipt_long</span>
+                </div>
+                <h2 class="text-2xl font-bold mb-2">Buscá tus Reservas</h2>
+                <p class="text-sm text-gray-500 font-medium mb-6">Ingresá el correo que usaste al agendar para consultar el estado de tus turnos o realizar el pago.</p>
+                <form onsubmit="event.preventDefault(); window.buscarReservas();">
+                    <input type="email" id="search-email" required placeholder="tú@correo.com" class="w-full border border-gray-200 rounded-xl px-4 py-4 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all text-center mb-4">
+                    <button type="submit" id="btn-search" class="w-full bg-dark text-white font-extrabold text-lg py-4 rounded-xl shadow-lg hover:bg-gray-800 active:scale-95 transition-all">
+                        Consultar
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="results-step" class="hidden flex-col transition-all duration-500 opacity-0 translate-y-4">
+            <div class="flex justify-between items-end mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold font-tracking-tight">Historial de Turnos</h2>
+                    <p class="text-sm text-gray-500 font-medium" id="results-subtitle">Cargando...</p>
+                </div>
+                <button onclick="window.reiniciarBusqueda()" class="text-sm font-bold text-blue-600 hover:text-blue-800 bg-blue-50 px-3 py-1.5 rounded-lg transition-colors border border-blue-100 flex items-center gap-1">
+                    <span class="material-symbols-rounded text-base">search</span> Otro correo
+                </button>
+            </div>
+
+            <div id="reservas-list" class="grid gap-4 sm:grid-cols-2">
+                <!-- Lista de reservas -->
+            </div>
+        </div>
+    </main>
+
+    <script type="module">
+        import { DisponibilidadService } from '../Capa_de_Logica/DisponibilidadService.js';
+        import { ConfigController } from '../Capa_de_Logica/ConfigController.js';
+
+        let clubConfig = null;
+
+        window.addEventListener('load', async () => {
+            clubConfig = await ConfigController.getConfig();
+            if(clubConfig) {
+                document.getElementById('club-title').textContent = clubConfig.nombre;
+                document.title = clubConfig.nombre + " - Mis Reservas";
+            }
+        });
+
+        window.buscarReservas = async () => {
+            const btn = document.getElementById('btn-search');
+            const email = document.getElementById('search-email').value.trim();
+            btn.innerHTML = "Buscando...";
+            btn.disabled = true;
+
+            const reservas = await DisponibilidadService.obtenerReservasPorEmail(email);
+            
+            document.getElementById('email-step').style.display = 'none';
+            const resultsStep = document.getElementById('results-step');
+            resultsStep.classList.remove('hidden');
+            
+            requestAnimationFrame(() => {
+                resultsStep.classList.remove('opacity-0', 'translate-y-4');
+            });
+
+            document.getElementById('results-subtitle').textContent = `Para ${email}`;
+            const container = document.getElementById('reservas-list');
+
+            if(reservas.length === 0) {
+                container.innerHTML = `
+                <div class="col-span-full bg-white p-8 rounded-3xl shadow-sm border border-gray-100 text-center">
+                    <span class="material-symbols-rounded text-6xl text-gray-300 block mb-3">sentiment_dissatisfied</span>
+                    <h3 class="text-lg font-bold">No hay reservas</h3>
+                    <p class="text-sm text-gray-500 mt-1">No encontramos ningún turno activo con ese correo.</p>
+                    <button onclick="window.location.href='index.html'" class="mt-4 bg-brand text-white px-5 py-2.5 rounded-xl font-bold opacity-90 hover:opacity-100 transition-opacity decoration-none">Reservar ahora</button>
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = reservas.map(r => {
+                const isPending = r.estado === 'pendiente_pago';
+                let actionBtn = '';
+                if(isPending && clubConfig) {
+                    const phoneWs = (clubConfig.telefono_whatsapp || '').replace(/\D/g, '');
+                    const text = encodeURIComponent(`Hola, envío el comprobante de pago de mi reserva de *${r.canchas.nombre}* a las *${r.hora} hs* del día *${r.fecha}* por *$${r.precio}*.`);
+                    actionBtn = `
+                    <button onclick="window.open('https://wa.me/${phoneWs}?text=${text}', '_blank')" class="mt-3 w-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366]/20 font-bold py-2.5 rounded-lg flex items-center justify-center gap-1.5 text-sm transition-colors cursor-pointer border border-[#25D366]/20">
+                        <span class="material-symbols-rounded text-[18px]">send</span> Enviar Comprobante
+                    </button>
+                    <p class="text-[10px] text-gray-400 mt-1.5 text-center leading-tight">Si ya lo enviaste, el club lo confirmará en breve.</p>
+                    `;
+                }
+
+                return `
+                <div class="bg-white p-5 rounded-2xl shadow-sm border ${isPending ? 'border-amber-400/50' : 'border-gray-100'} flex flex-col h-full relative overflow-hidden">
+                    ${isPending ? '<div class="absolute top-0 inset-x-0 h-1 bg-amber-400"></div>' : '<div class="absolute top-0 inset-x-0 h-1 bg-green-500"></div>'}
+                    <div class="flex justify-between items-start mb-4">
+                        <div>
+                            <p class="font-extrabold text-gray-900">${r.canchas.nombre}</p>
+                            <p class="text-sm text-gray-500 font-medium">${r.fecha}</p>
+                        </div>
+                        <div class="${isPending ? 'bg-amber-50 text-amber-600' : 'bg-green-50 text-green-600'} font-black text-lg p-2 px-3 rounded-lg flex flex-col items-center leading-none">
+                            ${r.hora}<span class="text-[10px] font-bold uppercase mt-0.5">Hs</span>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center bg-gray-50 p-2.5 rounded-xl border border-gray-100 mb-2">
+                            <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Monto Total</span>
+                            <span class="font-black text-brand text-lg">$${r.precio}</span>
+                        </div>
+                        ${
+                            isPending 
+                            ? `<span class="inline-flex w-full justify-center items-center gap-1 px-3 py-1.5 bg-amber-100 text-amber-700 font-bold text-[11px] rounded-lg uppercase tracking-wider"><span class="material-symbols-rounded text-[14px]">schedule</span> PENDIENTE DE PAGO</span>`
+                            : `<span class="inline-flex w-full justify-center items-center gap-1 px-3 py-1.5 bg-green-100 text-green-700 font-bold text-[11px] rounded-lg uppercase tracking-wider"><span class="material-symbols-rounded text-[14px]">check_circle</span> RESERVA ABONADA</span>`
+                        }
+                        ${actionBtn}
+                    </div>
+                </div>
+                `;
+            }).join('');
+        };
+
+        window.reiniciarBusqueda = () => {
+            document.getElementById('search-email').value = '';
+            document.getElementById('btn-search').innerHTML = "Consultar";
+            document.getElementById('btn-search').disabled = false;
+            
+            const resultsStep = document.getElementById('results-step');
+            resultsStep.classList.add('hidden', 'opacity-0', 'translate-y-4');
+            
+            document.getElementById('email-step').style.display = 'block';
+        };
+    </script>
+</body>
+</html>

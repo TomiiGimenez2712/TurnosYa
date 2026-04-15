@@ -1,8 +1,8 @@
-import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
+﻿import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
 
 export class ConfigController {
     /**
-     * Obtiene la configuración pública global (1 fila)
+     * Obtiene la configuraciÃ³n pÃºblica global (1 fila)
      */
     static async getConfig() {
         const { data, error } = await supabaseClient
@@ -12,14 +12,14 @@ export class ConfigController {
             .single();
 
         if (error) {
-            console.error("Error obteniendo configuración del club:", error);
+            console.error("Error obteniendo configuraciÃ³n del club:", error);
             return null;
         }
         return data;
     }
 
     /**
-     * Actualiza la configuración global del club (sólo Admin validado por RLS)
+     * Actualiza la configuraciÃ³n global del club (sÃ³lo Admin validado por RLS)
      */
     static async updateConfig(datos) {
         const { error } = await supabaseClient
@@ -38,3 +38,4 @@ export class ConfigController {
         return { success: true };
     }
 }
+

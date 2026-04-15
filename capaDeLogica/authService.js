@@ -1,8 +1,8 @@
-import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
+﻿import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
 
 export class AuthService {
     /**
-     * Inicia sesión con correo y contraseña.
+     * Inicia sesiÃ³n con correo y contraseÃ±a.
      */
     static async login(email, password) {
         const { data, error } = await supabaseClient.auth.signInWithPassword({
@@ -17,7 +17,7 @@ export class AuthService {
     }
 
     /**
-     * Cierra la sesión activa.
+     * Cierra la sesiÃ³n activa.
      */
     static async logout() {
         const { error } = await supabaseClient.auth.signOut();
@@ -25,7 +25,7 @@ export class AuthService {
     }
 
     /**
-     * Comprueba si hay una sesión activa, si no la hay redirige.
+     * Comprueba si hay una sesiÃ³n activa, si no la hay redirige.
      */
     static async requireAuth(redirectTo = 'login.html') {
         const { data: { user }, error } = await supabaseClient.auth.getUser();
@@ -37,10 +37,11 @@ export class AuthService {
     }
 
     /**
-     * Chequea si el usuario está autenticado sin redirigir
+     * Chequea si el usuario estÃ¡ autenticado sin redirigir
      */
     static async isAuthenticated() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         return !!user;
     }
 }
+

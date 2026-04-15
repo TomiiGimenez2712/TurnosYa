@@ -1,4 +1,4 @@
-import { supabaseClient } from '../Capa_de_Datos/supabaseClient.js';
+﻿import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
 
 export class DisponibilidadService {
     /**
@@ -18,7 +18,7 @@ export class DisponibilidadService {
     }
 
     /**
-     * Obtiene las reservas para una fecha específica
+     * Obtiene las reservas para una fecha especÃ­fica
      */
     static async obtenerReservasPorFecha(fechaISO) {
         const { data, error } = await supabaseClient
@@ -35,14 +35,14 @@ export class DisponibilidadService {
 
     /**
      * Confirma la reserva validando de nuevo la disponibilidad antes de insertar
-     * para asegurar la transacción atómica
+     * para asegurar la transacciÃ³n atÃ³mica
      */
     static async confirmarReserva({ cancha_id, fecha, hora, jugador_nombre, jugador_telefono, jugador_email, precio }) {
         try {
-            // 1. Validar que la cancha y horario no estén ocupados es manejado en la base de datos
-            // por la restricción UNIQUE(cancha_id, fecha, hora). Al intentar insertar, si existe, fallará.
+            // 1. Validar que la cancha y horario no estÃ©n ocupados es manejado en la base de datos
+            // por la restricciÃ³n UNIQUE(cancha_id, fecha, hora). Al intentar insertar, si existe, fallarÃ¡.
             
-            // 2. Si no hay tabla de jugadores real que mantenga sesión, creamos/buscamos al jugador por su email (simulado).
+            // 2. Si no hay tabla de jugadores real que mantenga sesiÃ³n, creamos/buscamos al jugador por su email (simulado).
             let jugador_id;
             
             // Buscar jugador
@@ -70,7 +70,7 @@ export class DisponibilidadService {
                 jugador_id = newJugador.id;
             }
 
-            // 3. Crear Reserva (RNF1: Transacción y Concurrencia en BD)
+            // 3. Crear Reserva (RNF1: TransacciÃ³n y Concurrencia en BD)
             const { data: reserva, error: reservaError } = await supabaseClient
                 .from('reservas')
                 .insert([{
@@ -85,7 +85,7 @@ export class DisponibilidadService {
 
             if (reservaError) {
                 if (reservaError.code === '23505') { // Postgres Unique Violation
-                    return { success: false, error: "¡Ups! Este turno acaba de ser reservado por alguien más." };
+                    return { success: false, error: "Â¡Ups! Este turno acaba de ser reservado por alguien mÃ¡s." };
                 }
                 throw new Error(reservaError.message);
             }
@@ -120,3 +120,4 @@ export class DisponibilidadService {
         }
     }
 }
+

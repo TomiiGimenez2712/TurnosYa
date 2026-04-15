@@ -1,6 +1,6 @@
-import { DisponibilidadService } from './DisponibilidadService.js';
-import { ConfigController } from './ConfigController.js';
-import { UI } from '../Capa_de_Presentacion/UI.js';
+﻿import { DisponibilidadService } from './disponibilidadService.js';
+import { ConfigController } from './configController.js';
+import { UI } from '../capaDePresentacion/ui.js';
 
 let appState = {
     canchas: [],
@@ -14,7 +14,7 @@ let appState = {
 document.addEventListener("DOMContentLoaded", async () => {
     try {
         if(window.emailjs) emailjs.init({ publicKey: "TU_PUBLIC_KEY_AQUI" });
-    } catch(e) { console.log("EmailJS no cargado aún:", e); }
+    } catch(e) { console.log("EmailJS no cargado aÃºn:", e); }
 
     await cargarConfiguracionClub();
 
@@ -58,7 +58,7 @@ function renderDateSelector() {
         const btn = document.createElement("button");
         btn.className = `date-btn flex-shrink-0 flex flex-col items-center justify-center w-16 h-20 rounded-2xl border ${isToday ? 'border-gray-800 active' : 'border-gray-200 bg-white text-gray-600'}`;
         
-        const days = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+        const days = ['Dom', 'Lun', 'Mar', 'MiÃ©', 'Jue', 'Vie', 'SÃ¡b'];
         
         btn.innerHTML = `
             <span class="text-xs font-bold uppercase mb-1">${isToday ? 'Hoy' : days[d.getDay()]}</span>
@@ -113,8 +113,8 @@ function setFilter(type, btnElement) {
 
 function getIconForType(type) {
     const t = type.toLowerCase();
-    if (t.includes('fútbol') || t.includes('futbol')) return 'sports_soccer';
-    if (t.includes('pádel') || t.includes('padel') || t.includes('tenis')) return 'sports_tennis';
+    if (t.includes('fÃºtbol') || t.includes('futbol')) return 'sports_soccer';
+    if (t.includes('pÃ¡del') || t.includes('padel') || t.includes('tenis')) return 'sports_tennis';
     if (t.includes('basquet') || t.includes('basket')) return 'sports_basketball';
     if (t.includes('voley')) return 'sports_volleyball';
     return 'stadium';
@@ -249,7 +249,7 @@ window.confirmBooking = async function() {
     const emailInput = document.getElementById("client-email").value.trim();
 
     if(!nameInput || !phoneInput || !emailInput) {
-        UI.alert("Por favor completá tu Nombre, WhatsApp y Correo para continuar.", "Datos Incompletos", "error");
+        UI.alert("Por favor completÃ¡ tu Nombre, WhatsApp y Correo para continuar.", "Datos Incompletos", "error");
         return;
     }
     
@@ -295,7 +295,7 @@ function showPaymentModal(price, clientName, courtName, time) {
         const text = encodeURIComponent(`Hola, acabo de reservar *${courtName}* a las *${time} hs* a nombre de *${clientName}*. Adjunto comprobante de transferencia por *$${price}*.`);
         wsBtn.onclick = () => { window.open(`https://wa.me/${phoneWs}?text=${text}`, '_blank'); };
     } else {
-        wsBtn.onclick = () => { UI.alert("El club no ha configurado su WhatsApp de recepción.", "No disponible", "info"); };
+        wsBtn.onclick = () => { UI.alert("El club no ha configurado su WhatsApp de recepciÃ³n.", "No disponible", "info"); };
     }
 
     const content = document.getElementById("payment-content");
@@ -312,18 +312,18 @@ window.copiarAlias = async function() {
     const text = document.getElementById("payment-bank-details").textContent.trim();
     if (!text) return;
 
-    // Intentamos extraer un CBU/CVU (22 dígitos) o un Alias
+    // Intentamos extraer un CBU/CVU (22 dÃ­gitos) o un Alias
     const cbuMatch = text.match(/[0-9]{22}/);
     const aliasMatch = text.match(/alias[\s:]*([a-z0-9_\.\-]+)/i);
     
     let textToCopy = "";
     
     if (aliasMatch && aliasMatch[1]) {
-        textToCopy = aliasMatch[1]; // Priorizamos alias por ser más amigable
+        textToCopy = aliasMatch[1]; // Priorizamos alias por ser mÃ¡s amigable
     } else if (cbuMatch && cbuMatch[0]) {
         textToCopy = cbuMatch[0]; // Caemos a CBU
     } else {
-        textToCopy = text; // Si no hay formato estándar, copiamos todo como plan b
+        textToCopy = text; // Si no hay formato estÃ¡ndar, copiamos todo como plan b
     }
 
     try {
@@ -351,3 +351,4 @@ window.closePaymentModal = function() {
         modal.classList.remove("flex");
     }, 200);
 };
+

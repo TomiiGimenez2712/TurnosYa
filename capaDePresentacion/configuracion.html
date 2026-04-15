@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="light" lang="es">
 <head>
     <meta charset="utf-8" />
@@ -33,7 +33,7 @@
                     <input type="text" id="club-global-name" required placeholder="Ej. Turnos YA" class="w-full border border-indigo-200/60 rounded-xl px-3 py-2.5 bg-white font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all">
                 </div>
                 <div>
-                    <label class="block text-xs uppercase tracking-wider font-extrabold text-indigo-600 mb-1">WhatsApp Recepción (con código de país ej: 54911...)</label>
+                    <label class="block text-xs uppercase tracking-wider font-extrabold text-indigo-600 mb-1">WhatsApp RecepciÃ³n (con cÃ³digo de paÃ­s ej: 54911...)</label>
                     <input type="number" id="club-global-ws" required placeholder="5491122334455" class="w-full border border-indigo-200/60 rounded-xl px-3 py-2.5 bg-white font-semibold focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all text-sm">
                 </div>
                 <div>
@@ -54,17 +54,17 @@
             <form id="court-form" class="space-y-4" onsubmit="event.preventDefault(); window.guardarCancha();">
                 <div>
                     <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 mb-1">Nombre Identificador</label>
-                    <input type="text" id="court-name" required placeholder="Ej. Fútbol 5 - Panorámica" class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
+                    <input type="text" id="court-name" required placeholder="Ej. FÃºtbol 5 - PanorÃ¡mica" class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
                 </div>
                 
                 <div>
-                    <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 mb-1">Deporte Asociado (Categoría)</label>
+                    <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 mb-1">Deporte Asociado (CategorÃ­a)</label>
                     <select id="court-type" required class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
-                        <option value="padel">Pádel</option>
-                        <option value="futbol">Fútbol</option>
+                        <option value="padel">PÃ¡del</option>
+                        <option value="futbol">FÃºtbol</option>
                         <option value="tenis">Tenis</option>
-                        <option value="basquet">Básquet</option>
-                        <option value="voley">Vóley</option>
+                        <option value="basquet">BÃ¡squet</option>
+                        <option value="voley">VÃ³ley</option>
                     </select>
                 </div>
 
@@ -88,7 +88,7 @@
                     Guardar Cancha
                 </button>
                 <button type="button" id="btn-cancel" onclick="window.cancelarEdicion()" class="hidden w-full h-12 bg-gray-100 text-gray-600 font-bold text-base rounded-xl hover:bg-gray-200 transition-all mt-2">
-                    Cancelar Edición
+                    Cancelar EdiciÃ³n
                 </button>
             </form>
         </div>
@@ -105,21 +105,21 @@
     </main>
 
     <script type="module">
-        import { CanchaController } from '../Capa_de_Logica/CanchaController.js';
-        import { ConfigController } from '../Capa_de_Logica/ConfigController.js';
-        import { AuthService } from '../Capa_de_Logica/AuthService.js';
-        import { UI } from './UI.js';
+        import { CanchaController } from '../capaDeLogica/canchaController.js';
+        import { ConfigController } from '../capaDeLogica/configController.js';
+        import { AuthService } from '../capaDeLogica/authService.js';
+        import { UI } from './ui.js';
 
         let globalCanchas = [];
         let editandoId = null;
 
-        // Guardián de seguridad (Auth Guard)
+        // GuardiÃ¡n de seguridad (Auth Guard)
         window.addEventListener('load', async () => {
             await AuthService.requireAuth('login.html');
             window.cargarConfigGlobal();
         });
 
-        // Configuración Global del Club
+        // ConfiguraciÃ³n Global del Club
         window.cargarConfigGlobal = async () => {
             const config = await ConfigController.getConfig();
             if (config) {
@@ -142,7 +142,7 @@
 
             const result = await ConfigController.updateConfig(datos);
             if(result.success) {
-                UI.alert("Configuración comercial actualizada correctamente.", "Éxito", "success");
+                UI.alert("ConfiguraciÃ³n comercial actualizada correctamente.", "Ã‰xito", "success");
             } else {
                 UI.alert("Error de permisos operando club_config: " + result.error, "Error", "error");
             }
@@ -151,7 +151,7 @@
             btn.disabled = false;
         };
 
-        // Hacer disponible la función globalmente para el form
+        // Hacer disponible la funciÃ³n globalmente para el form
         window.guardarCancha = async () => {
             const btn = document.getElementById('btn-save');
             const originalText = btn.innerHTML;
@@ -177,7 +177,7 @@
             btn.disabled = false;
 
             if (result.success) {
-                UI.alert(editandoId ? "Cancha actualizada con éxito." : "Cancha registrada con éxito.", "Guardado Exitoso", "success");
+                UI.alert(editandoId ? "Cancha actualizada con Ã©xito." : "Cancha registrada con Ã©xito.", "Guardado Exitoso", "success");
                 window.cancelarEdicion();
                 window.cargarListaCanchas();
             } else {
@@ -198,7 +198,7 @@
                 <div class="p-4 border border-gray-100 rounded-xl bg-gray-50 flex justify-between items-center">
                     <div>
                         <p class="font-bold text-gray-900">${c.nombre}</p>
-                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">${c.tipo_deporte} • ${c.hora_apertura}:00 a ${c.hora_cierre}:00 • $${c.precio}</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">${c.tipo_deporte} â€¢ ${c.hora_apertura}:00 a ${c.hora_cierre}:00 â€¢ $${c.precio}</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="window.prepararEdicion('${c.id}')" class="text-blue-500 hover:text-blue-700 bg-white shadow-sm rounded-full p-2 border border-gray-100 transition-colors" title="Editar Cancha">
@@ -243,7 +243,7 @@
 
         window.borrarCancha = (id) => {
             UI.confirm(
-                "¿Estás seguro de eliminar esta cancha? Si tiene reservas asignadas, se producirá un error debido a la integridad referencial.",
+                "Â¿EstÃ¡s seguro de eliminar esta cancha? Si tiene reservas asignadas, se producirÃ¡ un error debido a la integridad referencial.",
                 async () => {
                     const result = await CanchaController.eliminarCancha(id);
                     if (result.success) {
@@ -261,3 +261,4 @@
     </script>
 </body>
 </html>
+

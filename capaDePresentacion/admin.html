@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html class="light" lang="es">
 <head>
     <meta charset="utf-8" />
@@ -18,9 +18,9 @@
         <div class="max-w-5xl mx-auto px-4 py-3 flex justify-between items-center">
             <span class="text-lg font-extrabold flex items-center gap-2"><span class="material-symbols-rounded text-brand">stadium</span> Reservas (Admin)</span>
             <div class="flex items-center gap-3">
-                <button onclick="window.location.href='configuracion.html'" class="text-sm font-bold text-gray-600 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-lg transition-colors border border-gray-200 hidden sm:block">Configuración</button>
+                <button onclick="window.location.href='configuracion.html'" class="text-sm font-bold text-gray-600 hover:text-gray-900 bg-gray-100 px-3 py-1.5 rounded-lg transition-colors border border-gray-200 hidden sm:block">ConfiguraciÃ³n</button>
                 <button onclick="window.location.href='configuracion.html'" class="text-gray-600 bg-gray-100 p-1.5 rounded-lg sm:hidden"><span class="material-symbols-rounded block">settings</span></button>
-                <button onclick="window.cerrarSesion()" class="text-sm font-bold text-red-600 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-lg transition-colors border border-red-100">Cerrar Sesión</button>
+                <button onclick="window.cerrarSesion()" class="text-sm font-bold text-red-600 hover:text-red-700 bg-red-50 px-3 py-1.5 rounded-lg transition-colors border border-red-100">Cerrar SesiÃ³n</button>
             </div>
         </div>
     </nav>
@@ -39,9 +39,9 @@
         </div>
     </main>
     <script type="module">
-        import { AuthService } from '../Capa_de_Logica/AuthService.js';
-        import { AdminController } from '../Capa_de_Logica/AdminController.js';
-        import { UI } from './UI.js';
+        import { AuthService } from '../capaDeLogica/authService.js';
+        import { AdminController } from '../capaDeLogica/adminController.js';
+        import { UI } from './ui.js';
 
         // Variables Globales seguras
         let offset;
@@ -78,7 +78,7 @@
                 container.innerHTML = `
                     <div class="col-span-full text-center py-16 bg-white rounded-3xl border border-gray-100 shadow-sm">
                         <span class="material-symbols-rounded text-5xl text-gray-300 block mb-2">event_busy</span>
-                        <p class='text-gray-500 font-medium'>Vaya, no hay turnos agendados para este día.</p>
+                        <p class='text-gray-500 font-medium'>Vaya, no hay turnos agendados para este dÃ­a.</p>
                     </div>`;
                 return;
             }
@@ -133,7 +133,7 @@
 
         window.eliminarDato = (id) => {
             UI.confirm(
-                "¿Estás 100% seguro de cancelar y eliminar este turno de la agenda? Esta acción es irreversible.",
+                "Â¿EstÃ¡s 100% seguro de cancelar y eliminar este turno de la agenda? Esta acciÃ³n es irreversible.",
                 async () => {
                     const result = await AdminController.eliminarReserva(id);
                     if(result.success) {
@@ -148,7 +148,7 @@
 
         window.confirmarPago = (id) => {
             UI.confirm(
-                "¿Confirmar que esta reserva ya está pagada? Esto la marcará en verde.",
+                "Â¿Confirmar que esta reserva ya estÃ¡ pagada? Esto la marcarÃ¡ en verde.",
                 async () => {
                     const result = await AdminController.confirmarPago(id);
                     if(result.success) {
@@ -163,3 +163,4 @@
     </script>
 </body>
 </html>
+

@@ -6,15 +6,21 @@ export class CanchaController {
      * Intercepta la creación de una cancha desde el formulario web
      * y utiliza la Factory para persistir el objeto adecuado en BD.
      */
-    static async createCancha(datosFormulario) {
+    static async createCancha(nombre, tipo, apertura, cierre) {
         try {
+            const precio = arguments[4] || 0;
+
+            if (Number(apertura) >= Number(cierre)) {
+                return { success: false, error: "Datos de horario incorrectos" };
+            }
+
             // 1. Usamiento del Patrón Factory Method
             const nuevaCanchaObj = CanchaFactory.crearCancha(
-                datosFormulario.nombre,
-                datosFormulario.tipo_deporte,
-                datosFormulario.hora_apertura,
-                datosFormulario.hora_cierre,
-                datosFormulario.precio
+                nombre,
+                tipo,
+                apertura,
+                cierre,
+                precio
             );
 
             // Podemos loguear requisitos si quisiéramos para validar el Factory
@@ -112,5 +118,59 @@ export class CanchaController {
             console.error("Error al actualizar la cancha:", err);
             return { success: false, error: err.message };
         }
+    }
+
+    /**
+     * Obtiene las reservas con información relacionada para la vista del administrador
+     */
+    static async obtenerReservasDelDia(fechaBase) {
+        const { data, error } = await supabaseClient
+            .from('reservas')
+            .select(`
+                id, fecha, hora, precio, estado,
+                canchas ( nombre ),
+                jugadores ( nombre, telefono, email )
+            `)
+            .eq('fecha', fechaBase)
+            .order('hora', { ascending: true });
+
+        if (error) {
+            console.error("Error al traer reservas para admin:", error);
+            return null;
+        }
+        return data; 
+    }
+
+    /**
+     * Elimina una reserva de la base de datos
+     * (El RLS requiere que el usuario esté autenticado para hacer esto)
+     */
+    static async eliminarReserva(id) {
+        const { error } = await supabaseClient
+            .from('reservas')
+            .delete()
+            .eq('id', id);
+
+        if (error) {
+            console.error("Error eliminando reserva:", error);
+            return { success: false, error: error.message };
+        }
+        return { success: true };
+    }
+
+    /**
+     * Confirma el pago de una reserva pendiente
+     */
+    static async confirmarPago(id) {
+        const { error } = await supabaseClient
+            .from('reservas')
+            .update({ estado: 'confirmada' })
+            .eq('id', id);
+
+        if (error) {
+            console.error("Error confirmando pago:", error);
+            return { success: false, error: error.message };
+        }
+        return { success: true };
     }
 }

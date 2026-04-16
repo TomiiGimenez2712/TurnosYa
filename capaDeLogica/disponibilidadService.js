@@ -1,4 +1,4 @@
-import { supabaseClient } from '../capaDeDatos/supabaseClient.js';
+import { supabaseClient, createReserva } from '../capaDeDatos/supabaseClient.js';
 
 export class DisponibilidadService {
     /**
@@ -34,11 +34,34 @@ export class DisponibilidadService {
     }
 
     /**
+     * Valida previamente si la cancha está disponible
+     */
+    static async validarSolapamiento(idCancha, fecha, hora) {
+        const { data, error } = await supabaseClient
+            .from('reservas')
+            .select('id')
+            .eq('cancha_id', idCancha)
+            .eq('fecha', fecha)
+            .eq('hora', hora)
+            .maybeSingle();
+            
+        return data !== null;
+    }
+
+    /**
      * Confirma la reserva validando de nuevo la disponibilidad antes de insertar
      * para asegurar la transacción atómica
      */
-    static async confirmarReserva({ cancha_id, fecha, hora, jugador_nombre, jugador_telefono, jugador_email, precio }) {
+    static async confirmarReserva(idCancha, fecha, hora) {
         try {
+            const jugador_nombre = arguments[3];
+            const jugador_telefono = arguments[4];
+            const jugador_email = arguments[5];
+            const precio = arguments[6];
+
+            // 1. Opcional: Validación adicional usando el nuevo método
+            const isSolapado = await this.validarSolapamiento(idCancha, fecha, hora);
+            if (isSolapado) return { success: false, error: "El turno ya no se encuentra disponible" };
             // 1. Validar que la cancha y horario no estén ocupados es manejado en la base de datos
             // por la restricción UNIQUE(cancha_id, fecha, hora). Al intentar insertar, si existe, fallará.
             
@@ -70,22 +93,12 @@ export class DisponibilidadService {
                 jugador_id = newJugador.id;
             }
 
-            // 3. Crear Reserva (RNF1: Transacción y Concurrencia en BD)
-            const { data: reserva, error: reservaError } = await supabaseClient
-                .from('reservas')
-                .insert([{
-                    cancha_id,
-                    jugador_id,
-                    fecha,
-                    hora,
-                    precio
-                }])
-                .select()
-                .single();
-
-            if (reservaError) {
+            // 3. Crear Reserva utilizando la nueva función interactora (RNF1: Transacción y Concurrencia en BD)
+            try {
+                const reserva = await createReserva(jugador_id, idCancha, fecha, hora, precio);
+            } catch (reservaError) {
                 if (reservaError.code === '23505') { // Postgres Unique Violation
-                    return { success: false, error: "¡Ups! Este turno acaba de ser reservado por alguien más." };
+                    return { success: false, error: "El turno ya no se encuentra disponible" };
                 }
                 throw new Error(reservaError.message);
             }

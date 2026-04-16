@@ -40,7 +40,7 @@
     </main>
     <script type="module">
         import { AuthService } from '../capaDeLogica/authService.js';
-        import { AdminController } from '../capaDeLogica/adminController.js';
+        import { CanchaController } from '../capaDeLogica/canchaController.js';
         import { UI } from './ui.js';
 
         // Variables Globales seguras
@@ -67,7 +67,7 @@
             const container = document.getElementById('admin-bookings');
             container.innerHTML = "<p class='col-span-full text-center text-gray-400 py-10 font-medium flex justify-center items-center gap-2'><span class='material-symbols-rounded animate-spin'>sync</span> Cargando agenda...</p>";
 
-            const reservas = await AdminController.obtenerReservasDelDia(dateStr);
+            const reservas = await CanchaController.obtenerReservasDelDia(dateStr);
 
             if (!reservas) {
                 container.innerHTML = "<p class='col-span-full text-center text-red-500 py-10 font-medium'>Error obteniendo reservas de la base protegida.</p>";
@@ -135,7 +135,7 @@
             UI.confirm(
                 "¿Estás 100% seguro de cancelar y eliminar este turno de la agenda? Esta acción es irreversible.",
                 async () => {
-                    const result = await AdminController.eliminarReserva(id);
+                    const result = await CanchaController.eliminarReserva(id);
                     if(result.success) {
                         window.cargarReservas();
                     } else {
@@ -150,7 +150,7 @@
             UI.confirm(
                 "¿Confirmar que esta reserva ya está pagada? Esto la marcará en verde.",
                 async () => {
-                    const result = await AdminController.confirmarPago(id);
+                    const result = await CanchaController.confirmarPago(id);
                     if(result.success) {
                         window.cargarReservas();
                     } else {

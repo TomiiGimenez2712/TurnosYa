@@ -8,24 +8,56 @@ Una aplicación web moderna, rápida y responsiva diseñada para facilitar la ge
 - **Reserva de Turnos**: Selección de fechas, canchas y horarios disponibles con formularios simples.
 - **Panel de Administrador**: Gestión de configuración, disponibilidad, canchas y visualización de reservas.
 - **Arquitectura Multicapa**: Código refactorizado y organizado en capas claras para maximizar la mantenibilidad (Presentación, Lógica, Datos).
-- **Integración con WhatsApp**: Envío de comprobantes de transferencia directamente por WhatsApp.
 - **Gestión de Base de Datos y Autenticación**: Impulsado por Supabase.
 
 ## 🏗️ Arquitectura del Proyecto
 
-El proyecto está diseñado bajo un estricto patrón de **Arquitectura Multicapa (N-Tier)**, dividiendo las responsabilidades lógicas y físicas del sistema de la siguiente manera:
+El proyecto está diseñado bajo un estricto patrón de **Arquitectura Multicapa (N-Tier)**, dividiendo las responsabilidades en capas claras para favorecer la escalabilidad, separación de intereses (SoC) y la fácil mantenibilidad.
 
-- 📂 **`Capa_de_Presentacion/`**: Contiene todo lo relacionado con la Interfaz de Usuario (UI). Páginas HTML (`index.html`, `admin.html`, `login.html`, etc.), hojas de estilo (`style.css`) y scripts orientados exclusivamente al DOM (`UI.js`).
-- 📂 **`Capa_de_Logica/`**: El núcleo de la aplicación. Maneja las reglas de negocio, los controladores y los servicios (`app.js`, `AdminController.js`, `DisponibilidadService.js`, `CanchaFactory.js`, etc.).
-- 📂 **`Capa_de_Datos/`**: Encargada de la persistencia e interacción con la base de datos externa (`supabaseClient.js`).
+### 🌳 Mapa de Directorios (Distribución de Archivos)
+
+```text
+Turnos_YA/
+├── index.html                   # Punto de entrada y redirección (Router Frontal)
+├── capaDePresentacion/          # Capa Nivel 1: Interfaz de Usuario (UI)
+│   ├── index.html               # Frontend principal (Vista Clientes: Selección de turnos)
+│   ├── admin.html               # Dashboard de gestión de agenda (Vista Staff)
+│   ├── configuracion.html       # Interfaz de alta de canchas y definición de datos comerciales
+│   ├── misReservas.html         # Portal de autogestión y consulta de turnos para clientes
+│   ├── login.html               # Formulario de autenticación administrativa
+│   ├── style.css                # Hoja de estilos complementaria (Tailwind va por CDN)
+│   └── ui.js                    # Utilidades de DOM globales (Renderizado de alertas y dialogos)
+│
+├── capaDeLogica/                # Capa Nivel 2: Reglas de Negocio y Controladores
+│   ├── app.js                   # Orquestador del Frontend (Maneja el flujo principal cliente-reserva)
+│   ├── canchaController.js      # Controlador encargado del CRUD de Canchas y gestión de Reservas (Admin)
+│   ├── disponibilidadService.js # Lógica de validación atómica de horarios, solapamientos y turnos
+│   ├── authService.js           # Validador y gestor seguro de las sesiones (Router Guard)
+│   ├── configController.js      # Gestiona configuraciones estables del club (Nombre, CBU, WhatsApp)
+│   ├── canchaFactory.js         # Implementación del patrón Factory Method para estructurar canchas
+│   └── cancha.js                # Modelo abstracto del dominio
+│
+└── capaDeDatos/                 # Capa Nivel 3: Persistencia y Acceso a Datos
+    ├── supabaseClient.js        # Patrón Singleton para conexión a BD y funciones Wrapper SQL (createReserva)
+    └── supabase/                # Referencias y migraciones históricas locales del BaaS
+```
+
+**¿Cómo es el flujo de las cosas?**
+1. Los archivos ubicados en la `capaDePresentacion` (Vistas) capturan la intención del usuario a través del DOM y eventos HTML.
+2. Estos eventos son delegados inmediatamente a los **Controladores** y **Servicios** correspondientes dentro de la `capaDeLogica`, garantizando que la UI sea tonta (no decida nada).
+3. La lógica examina el negocio (por ejemplo, usando `validarSolapamiento`), y si está todo en orden, se comunica bidireccionalmente con la `capaDeDatos` donde se orquestan las consultas asíncronas de Supabase.
 
 ## 🛠️ Tecnologías Utilizadas
 
 - **Frontend**: HTML5, CSS3, Vanilla JavaScript (Módulos ES6)
 - **Estilos**: [TailwindCSS](https://tailwindcss.com/) (Vía CDN)
 - **Backend as a Service (BaaS)**: [Supabase](https://supabase.com/) (Base de datos PostgreSQL y Autenticación)
-- **Notificaciones/Emails**: [EmailJS](https://www.emailjs.com/)
 - **Iconografía**: Google Material Symbols
+
+## 🌟 Funcionalidades Extra (Fuera de Alcance Académico)
+
+Si bien el núcleo académico abarca la Gestión de Infraestructura y el Motor de Reservas, el proyecto incorpora la siguiente mejora adicional:
+- **Integración con WhatsApp**: Generación automática de mensajes personalizados con montos, fechas y canchas para enviar el comprobante de pago directo a la recepción.
 
 ## ⚙️ Instalación y Uso Local
 

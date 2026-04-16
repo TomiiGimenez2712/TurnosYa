@@ -107,9 +107,17 @@
                 let actionBtn = '';
                 if(isPending && clubConfig) {
                     const phoneWs = (clubConfig.telefono_whatsapp || '').replace(/\D/g, '');
+                    const cbuDetails = clubConfig.detalles_bancarios || 'Consultar datos bancarios al club.';
                     const text = encodeURIComponent(`Hola, envío el comprobante de pago de mi reserva de *${r.canchas.nombre}* a las *${r.hora} hs* del día *${r.fecha}* por *$${r.precio}*.`);
                     actionBtn = `
-                    <button onclick="window.open('https://wa.me/${phoneWs}?text=${text}', '_blank')" class="mt-3 w-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366]/20 font-bold py-2.5 rounded-lg flex items-center justify-center gap-1.5 text-sm transition-colors cursor-pointer border border-[#25D366]/20">
+                    <div class="mt-3 bg-gray-100 p-2.5 rounded-lg border border-gray-200 relative">
+                        <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider mb-1">Datos para Transferir</p>
+                        <p class="font-mono text-xs font-bold text-gray-800 whitespace-pre-wrap leading-tight select-all pr-8">${cbuDetails}</p>
+                        <button type="button" onclick="window.copiarDato('${encodeURIComponent(cbuDetails)}', this)" class="absolute top-2 right-2 text-gray-400 hover:text-brand transition-colors p-1.5 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center" title="Copiar Datos Bancarios">
+                            <span class="material-symbols-rounded block text-[16px]">content_copy</span>
+                        </button>
+                    </div>
+                    <button onclick="window.open('https://wa.me/${phoneWs}?text=${text}', '_blank')" class="mt-2 w-full bg-[#25D366]/10 text-[#075E54] hover:bg-[#25D366]/20 font-bold py-2.5 rounded-lg flex items-center justify-center gap-1.5 text-sm transition-colors cursor-pointer border border-[#25D366]/20">
                         <span class="material-symbols-rounded text-[18px]">send</span> Enviar Comprobante
                     </button>
                     <p class="text-[10px] text-gray-400 mt-1.5 text-center leading-tight">Si ya lo enviaste, el club lo confirmará en breve.</p>
@@ -155,6 +163,26 @@
             resultsStep.classList.add('hidden', 'opacity-0', 'translate-y-4');
             
             document.getElementById('email-step').style.display = 'block';
+        };
+
+        window.copiarDato = async (encodedData, btn) => {
+            const text = decodeURIComponent(encodedData);
+            if (!text) return;
+
+            const cbuMatch = text.match(/[0-9]{22}/);
+            const aliasMatch = text.match(/alias[\s:]*([a-z0-9_\.\-]+)/i);
+            
+            let textToCopy = aliasMatch && aliasMatch[1] ? aliasMatch[1] : (cbuMatch && cbuMatch[0] ? cbuMatch[0] : text);
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                btn.innerHTML = '<span class="material-symbols-rounded block text-[16px] text-brand">check</span>';
+                setTimeout(() => {
+                    btn.innerHTML = '<span class="material-symbols-rounded block text-[16px]">content_copy</span>';
+                }, 2000);
+            } catch(e) {
+                console.error("Error al copiar:", e);
+            }
         };
     </script>
 </body>

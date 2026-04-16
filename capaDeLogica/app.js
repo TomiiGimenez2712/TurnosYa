@@ -12,10 +12,6 @@ let appState = {
 };
 
 document.addEventListener("DOMContentLoaded", async () => {
-    try {
-        if(window.emailjs) emailjs.init({ publicKey: "TU_PUBLIC_KEY_AQUI" });
-    } catch(e) { console.log("EmailJS no cargado aún:", e); }
-
     await cargarConfiguracionClub();
 
     await cargarCanchas();
@@ -256,20 +252,24 @@ window.confirmBooking = async function() {
     const dateKey = appState.selectedDate.toISOString().split('T')[0];
     
     // Llamar al DisponibilidadService (RNF1 - Concurrencia strict)
-    const result = await DisponibilidadService.confirmarReserva({
-        cancha_id: appState.bookingState.courtId,
-        fecha: dateKey,
-        hora: appState.bookingState.time,
-        precio: appState.bookingState.price,
-        jugador_nombre: nameInput,
-        jugador_telefono: phoneInput,
-        jugador_email: emailInput
-    });
+    // El método ahora recibe explícitamente idCancha, fecha, hora según los requerimientos UML
+    const result = await DisponibilidadService.confirmarReserva(
+        appState.bookingState.courtId,
+        dateKey,
+        appState.bookingState.time,
+        nameInput,
+        phoneInput,
+        emailInput,
+        appState.bookingState.price
+    );
 
     if (!result.success) {
         UI.alert(result.error, "Error de Reserva", "error");
         return;
     }
+    
+    // Mostramos el alert correcto solicitado
+    UI.alert("Reserva confirmada con éxito", "Éxito", "success");
     
     window.closeModal();
     loadAndRenderCourts(); 

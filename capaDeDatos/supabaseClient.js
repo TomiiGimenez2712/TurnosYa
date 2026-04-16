@@ -4,4 +4,14 @@ export const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdX
 // Instancia única (Singleton) del cliente Supabase
 export const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+export async function createReserva(idJugador, idCancha, fecha, hora) {
+    return await supabaseClient.from('reservas').insert([{
+        jugador_id: idJugador,
+        cancha_id: idCancha,
+        fecha: fecha,
+        hora: hora,
+        precio: arguments[4] || 0 // Fallback if precio was included but technically optional for this function signature.
+    }]).select().single();
+}
+
 console.log("¡Cliente Supabase (Módulo) Iniciado!");

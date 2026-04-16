@@ -170,7 +170,7 @@
             if (editandoId) {
                 result = await CanchaController.editarCancha(editandoId, datos);
             } else {
-                result = await CanchaController.createCancha(datos);
+                result = await CanchaController.createCancha(datos.nombre, datos.tipo_deporte, datos.hora_apertura, datos.hora_cierre, datos.precio);
             }
 
             btn.innerHTML = editandoId ? "Actualizar Cancha" : "Guardar Cancha";

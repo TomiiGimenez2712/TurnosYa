@@ -113,6 +113,21 @@
                 </div>
             </div>
 
+            <div class="bg-blue-50 border border-blue-100 rounded-2xl p-4 mb-4 text-left relative">
+                <p class="text-[11px] font-bold text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-1"><span class="material-symbols-rounded text-sm">account_balance</span> Datos para la Seña</p>
+                <p class="text-xs text-gray-600 mb-3">Transfiere el monto correspondiente. Te pediremos enviar el comprobante en el siguiente paso.</p>
+                <div class="font-mono text-sm font-bold text-gray-800 whitespace-pre-wrap leading-relaxed" id="payment-bank-details">
+                    Cargando datos...
+                </div>
+                <button onclick="window.copiarAlias()" id="btn-copy-alias" class="absolute top-4 right-4 text-gray-500 hover:text-brand transition-colors p-1.5 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center" title="Copiar Datos Bancarios">
+                    <span class="material-symbols-rounded block text-[18px]">content_copy</span>
+                </button>
+                <div class="mt-4 pt-3 border-t border-blue-100 flex justify-between items-center">
+                    <span class="text-xs font-bold text-gray-500 uppercase text-red-600">Monto a transferir (Seña) :</span>
+                    <span class="text-lg font-black text-red-600" id="payment-amount">$0</span>
+                </div>
+            </div>
+
             <div class="flex gap-2">
                 <button onclick="closeModal()" class="w-1/3 bg-gray-100 hover:bg-gray-200 text-gray-600 font-bold py-3.5 rounded-xl transition-all active:scale-95">
                     Cancelar
@@ -130,22 +145,8 @@
             <div class="w-20 h-20 bg-green-100 text-green-500 rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
                 <span class="material-symbols-rounded text-4xl">task_alt</span>
             </div>
-            <h3 class="text-2xl font-bold mb-2 text-gray-900">¡Reserva Puesta en Marcha!</h3>
-            <p class="text-sm text-gray-500 font-medium mb-6">Tu turno ha quedado congelado. Para confirmarlo definitivamente realiza la transferencia y envíanos el comprobante.</p>
-            
-            <div class="bg-gray-50 border border-gray-200 rounded-2xl p-4 mb-6 text-left relative">
-                <p class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-2">Datos para Transferencia</p>
-                <div class="font-mono text-sm font-bold text-gray-800 whitespace-pre-wrap leading-relaxed" id="payment-bank-details">
-                    Cargando datos...
-                </div>
-                <button onclick="window.copiarAlias()" id="btn-copy-alias" class="absolute top-4 right-4 text-gray-500 hover:text-brand transition-colors p-1.5 bg-white border border-gray-200 rounded-lg shadow-sm flex items-center justify-center" title="Copiar Datos Bancarios">
-                    <span class="material-symbols-rounded block text-[18px]">content_copy</span>
-                </button>
-                <div class="mt-4 pt-3 border-t border-gray-200 flex justify-between items-center">
-                    <span class="text-xs font-bold text-gray-500 uppercase">Monto a Transferir</span>
-                    <span class="text-lg font-black text-brand" id="payment-amount">$0</span>
-                </div>
-            </div>
+            <h3 class="text-2xl font-bold mb-2 text-gray-900">¡Reserva Confirmada!</h3>
+            <p class="text-sm text-gray-500 font-medium mb-6">Tu turno ha sido registrado con éxito. Te pedimos que nos envíes el comprobante de transferencia por WhatsApp para confirmar definitivamente tu seña.</p>
 
             <button id="btn-whatsapp-pay" class="w-full bg-[#25D366] hover:bg-[#1DA851] text-white font-extrabold text-lg py-4 rounded-xl shadow-lg shadow-[#25D366]/30 flex items-center justify-center gap-2 transition-all active:scale-95 mb-3">
                 <span class="material-symbols-rounded">send</span> Enviar Comprobante

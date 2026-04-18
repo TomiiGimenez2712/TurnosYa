@@ -2,8 +2,8 @@ export class Cancha {
     constructor(nombre, tipo_deporte, hora_apertura, hora_cierre, precio) {
         this.nombre = nombre;
         this.tipo_deporte = tipo_deporte;
-        this.hora_apertura = parseInt(hora_apertura);
-        this.hora_cierre = parseInt(hora_cierre);
+        this.hora_apertura = hora_apertura;
+        this.hora_cierre = hora_cierre;
         this.precio = parseFloat(precio);
     }
 

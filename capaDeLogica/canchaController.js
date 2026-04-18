@@ -10,8 +10,10 @@ export class CanchaController {
         try {
             const precio = arguments[4] || 0;
 
-            if (Number(apertura) >= Number(cierre)) {
-                return { success: false, error: "Datos de horario incorrectos" };
+            const aperturaStr = apertura.toString();
+            const cierreStr = cierre.toString();
+            if (aperturaStr >= cierreStr) {
+                return { success: false, error: "Datos de horario incorrectos: la apertura debe ser antes del cierre." };
             }
 
             // 1. Usamiento del Patrón Factory Method
@@ -26,6 +28,10 @@ export class CanchaController {
             // Podemos loguear requisitos si quisiéramos para validar el Factory
             console.log("Creando cancha con Factory:", nuevaCanchaObj.obtenerRequisitos());
 
+            // Soporte para Múltiples Clubes (SaaS) - Obtener ID del club base
+            const { data: clubConfig } = await supabaseClient.from('club_config').select('id').limit(1).single();
+            const clubId = clubConfig ? clubConfig.id : null;
+
             // 2. Persistencia en la Base de Datos a través de Supabase BaaS
             const { data, error } = await supabaseClient
                 .from('canchas')
@@ -34,7 +40,8 @@ export class CanchaController {
                     tipo_deporte: nuevaCanchaObj.tipo_deporte,
                     hora_apertura: nuevaCanchaObj.hora_apertura,
                     hora_cierre: nuevaCanchaObj.hora_cierre,
-                    precio: nuevaCanchaObj.precio
+                    precio: nuevaCanchaObj.precio,
+                    club_id: clubId
                 }])
                 .select()
                 .single();

@@ -33,7 +33,7 @@ Turnos_YA/
 │   ├── canchaController.js      # Controlador encargado del CRUD de Canchas y gestión de Reservas (Admin)
 │   ├── disponibilidadService.js # Lógica de validación atómica de horarios, solapamientos y turnos
 │   ├── authService.js           # Validador y gestor seguro de las sesiones (Router Guard)
-│   ├── configController.js      # Gestiona configuraciones estables del club (Nombre, CBU, WhatsApp)
+│   ├── configController.js      # Gestiona datos y configuraciones estables del sistema
 │   ├── canchaFactory.js         # Implementación del patrón Factory Method para estructurar canchas
 │   └── cancha.js                # Modelo abstracto del dominio
 │
@@ -54,10 +54,7 @@ Turnos_YA/
 - **Backend as a Service (BaaS)**: [Supabase](https://supabase.com/) (Base de datos PostgreSQL y Autenticación)
 - **Iconografía**: Google Material Symbols
 
-## 🌟 Funcionalidades Extra (Fuera de Alcance Académico)
 
-Si bien el núcleo académico abarca la Gestión de Infraestructura y el Motor de Reservas, el proyecto incorpora la siguiente mejora adicional:
-- **Integración con WhatsApp**: Generación automática de mensajes personalizados con montos, fechas y canchas para enviar el comprobante de pago directo a la recepción.
 
 ## ⚙️ Instalación y Uso Local
 
@@ -72,8 +69,8 @@ Dado que la aplicación funciona predominantemente en el lado del cliente (Clien
 
 - `/Capa_de_Presentacion/index.html` -> Página principal para reserva de clientes.
 - `/Capa_de_Presentacion/login.html` -> Ingreso seguro para el personal/administradores.
-- `/Capa_de_Presentacion/admin.html` -> Dashboard principal para la administración del club.
-- `/Capa_de_Presentacion/configuracion.html` -> Ajuste de reglas de negocio, horarios del club y datos de pago.
+- `/Capa_de_Presentacion/admin.html` -> Dashboard principal para la administración del sistema.
+- `/Capa_de_Presentacion/configuracion.html` -> Ajuste de reglas de negocio, horarios del predio y datos de pago.
 - `/Capa_de_Presentacion/mis_reservas.html` -> Vista rápida para que los clientes consulten el estado de sus reservas.
 
 ---

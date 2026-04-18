@@ -71,11 +71,11 @@
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 mb-1">Apertura (Hora)</label>
-                        <input type="number" id="court-open" min="0" max="23" required placeholder="14" class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
+                        <input type="time" id="court-open" required class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
                     </div>
                     <div>
                         <label class="block text-xs uppercase tracking-wider font-extrabold text-gray-500 mb-1">Cierre (Hora)</label>
-                        <input type="number" id="court-close" min="1" max="24" required placeholder="23" class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
+                        <input type="time" id="court-close" required class="w-full border border-gray-200 rounded-xl px-3 py-3 bg-gray-50 font-semibold focus:bg-white focus:outline-none focus:ring-2 focus:ring-brand focus:border-brand transition-all">
                     </div>
                 </div>
 
@@ -198,7 +198,7 @@
                 <div class="p-4 border border-gray-100 rounded-xl bg-gray-50 flex justify-between items-center">
                     <div>
                         <p class="font-bold text-gray-900">${c.nombre}</p>
-                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">${c.tipo_deporte} • ${c.hora_apertura}:00 a ${c.hora_cierre}:00 • $${c.precio}</p>
+                        <p class="text-xs text-gray-500 uppercase tracking-wider font-semibold">${c.tipo_deporte} • ${c.hora_apertura ? c.hora_apertura.substring(0, 5) : ''} a ${c.hora_cierre ? c.hora_cierre.substring(0, 5) : ''} • $${c.precio}</p>
                     </div>
                     <div class="flex gap-2">
                         <button onclick="window.prepararEdicion('${c.id}')" class="text-blue-500 hover:text-blue-700 bg-white shadow-sm rounded-full p-2 border border-gray-100 transition-colors" title="Editar Cancha">

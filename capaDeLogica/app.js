@@ -135,9 +135,11 @@ function renderCourts() {
         courtEl.className = "bg-white p-5 md:p-6 rounded-3xl shadow-sm border border-gray-100 mb-4";
         
         let slotsHtml = '';
-        for(let h = cancha.hora_apertura; h < cancha.hora_cierre; h++) {
+        const aperturaInt = parseInt(cancha.hora_apertura.toString().split(':')[0]);
+        const cierreInt = parseInt(cancha.hora_cierre.toString().split(':')[0]);
+        for(let h = aperturaInt; h < cierreInt; h++) {
             const timeStr = `${h}:00`;
-            const isBooked = courtBookings.includes(timeStr);
+            const isBooked = courtBookings.includes(timeStr) || courtBookings.includes(`${h < 10 ? '0' + h : h}:00:00`);
             const slotClass = isBooked ? 'slot-booked' : 'slot-available cursor-pointer';
             
             // Usamos un data attribute en vez de inyectar onclick directo para mayor seguridad y adherencia a modulos
@@ -208,6 +210,14 @@ function openBookingModal(courtId, courtName, time, price) {
     document.getElementById("modal-court").textContent = courtName;
     document.getElementById("modal-time").textContent = `${time} hs`;
     
+    // Bank Details and amount
+    document.getElementById("payment-amount").textContent = `$${parseFloat(price)}`;
+    let bankDetails = "No hay datos bancarios registrados.";
+    if (appState.clubConfig) {
+        bankDetails = appState.clubConfig.detalles_bancarios;
+    }
+    document.getElementById("payment-bank-details").textContent = bankDetails;
+    
     const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
     document.getElementById("modal-date").textContent = appState.selectedDate.toLocaleDateString('es-ES', options);
     
@@ -268,8 +278,7 @@ window.confirmBooking = async function() {
         return;
     }
     
-    // Mostramos el alert correcto solicitado
-    UI.alert("Reserva confirmada con éxito", "Éxito", "success");
+    // UI.alert("Reserva confirmada con éxito", "Éxito", "success");
     
     window.closeModal();
     loadAndRenderCourts(); 
@@ -280,15 +289,10 @@ function showPaymentModal(price, clientName, courtName, time) {
     const modal = document.getElementById("payment-modal");
     if(!modal) return;
     
-    document.getElementById("payment-amount").textContent = `$${price}`;
-    
-    let bankDetails = "No hay datos bancarios registrados.";
     let phoneWs = "";
     if (appState.clubConfig) {
-        bankDetails = appState.clubConfig.detalles_bancarios;
         phoneWs = (appState.clubConfig.telefono_whatsapp || "").replace(/\D/g, '');
     }
-    document.getElementById("payment-bank-details").textContent = bankDetails;
     
     const wsBtn = document.getElementById("btn-whatsapp-pay");
     if(phoneWs) {
